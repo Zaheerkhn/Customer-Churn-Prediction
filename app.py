@@ -6,7 +6,7 @@ import pandas as pd
 import pickle
 
 # Load the trained model
-model = tf.keras.models.load_model('Artifacts/model.h5')
+model = tf.keras.models.load_model('Artifacts/customer_churn_model.h5')
 # compiliing metrics
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
