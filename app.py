@@ -7,6 +7,8 @@ import pickle
 
 # Load the trained model
 model = tf.keras.models.load_model('Artifacts/model.h5')
+# compiliing metrics
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
 # Load the encoders and scalers
 with open('Artifacts/scaler.pkl', 'rb') as f:
