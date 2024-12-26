@@ -35,13 +35,13 @@ with col1:
 with col2:
     gender = st.selectbox('Gender', label_encoder.classes_)
 with col3:
-    age = st.number_input('Age', min_value=18, max_value=100)
+    age = st.text_input('Age', value="18")
 with col4:
     tenure = st.slider('Tenure', 0, 10)
 
 # Row 2
 with col1:
-    balance = st.number_input('Balance', min_value=0.0)
+    balance = st.text_input('Balance', value="0.0")
 with col2:
     products = st.slider('Number of products', 1, 4)
 with col3:
@@ -55,23 +55,27 @@ with col4:
 
 # Row 3
 with col1:
-    salary = st.number_input('Estimated Salary', min_value=0.0)
+    salary = st.text_input('Estimated Salary', value="0.0")
 with col2:
-    creditscore = st.number_input('Credit Score', min_value=300, max_value=850)
+    creditscore = st.text_input('Credit Score', value="300")
 
 # Prepare the input data
 def preprocess_and_predict():
-    input_data = pd.DataFrame({
-        'creditscore': [creditscore],
-        'gender': [label_encoder.transform([gender])[0]],
-        'age': [age],
-        'tenure': [tenure],
-        'balance': [balance],
-        'numofproducts': [products],
-        'hascrcard': [credit_card_value],
-        'isactivemember': [active_member_value],
-        'estimatedsalary': [salary]
-    })
+    try:
+        input_data = pd.DataFrame({
+            'creditscore': [float(creditscore)],
+            'gender': [label_encoder.transform([gender])[0]],
+            'age': [int(age)],
+            'tenure': [tenure],
+            'balance': [float(balance)],
+            'numofproducts': [products],
+            'hascrcard': [credit_card_value],
+            'isactivemember': [active_member_value],
+            'estimatedsalary': [float(salary)]
+        })
+    except ValueError:
+        st.error("Please enter valid numeric values for Age, Balance, Credit Score, and Estimated Salary.")
+        return
 
     # One hot encoding geography
     geo_encoder = one_hot_encoder.transform([[geography]]).toarray()
@@ -96,4 +100,3 @@ def preprocess_and_predict():
 # Button to perform prediction
 if st.button('Predict'):
     preprocess_and_predict()
-
