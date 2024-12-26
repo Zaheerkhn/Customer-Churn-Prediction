@@ -5,9 +5,10 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder, LabelEncoder
 import pandas as pd
 import pickle
 
-# Load the trained model
-model = tf.keras.models.load_model('Artifacts/customer_churn_model.h5')
-# compiliing metrics
+#Load the trained model without compiling
+model = tf.keras.models.load_model('Artifacts/customer_churn_model.h5', compile=False)
+
+# Compile the model
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
 # Load the encoders and scalers
