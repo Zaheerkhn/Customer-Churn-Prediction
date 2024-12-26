@@ -5,12 +5,10 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder, LabelEncoder
 import pandas as pd
 import pickle
 
-
-#Load the trained model
+# Load the trained model
 model = tf.keras.models.load_model('Artifacts/model.h5')
 
-
-#Load the encoders and scalers
+# Load the encoders and scalers
 with open('Artifacts/scaler.pkl', 'rb') as f:
     scaler = pickle.load(f)
 with open('Artifacts/label_encoder.pkl', 'rb') as f:
@@ -18,12 +16,10 @@ with open('Artifacts/label_encoder.pkl', 'rb') as f:
 with open('Artifacts/one_hot_encoder.pkl', 'rb') as f:
     one_hot_encoder = pickle.load(f)
 
-
-#Title
+# Title
 st.title('Customer Churn Prediction')
 
-
-#user input
+# User input
 # Create columns
 col1, col2, col3, col4 = st.columns(4)
 
@@ -55,7 +51,6 @@ with col1:
     salary = st.number_input('Estimated Salary', min_value=0.0)
 with col2:
     creditscore = st.number_input('Credit Score', min_value=300, max_value=850)
-
 
 # Prepare the input data
 def preprocess_and_predict():
@@ -89,7 +84,7 @@ def preprocess_and_predict():
         st.write('The customer is likely to churn')
     else:
         st.write('The customer is not likely to churn')
-        st.write('Probability of churning: ', prediction_proba)
+    st.write('Probability of churning: ', prediction_proba)
 
 # Button to perform prediction
 if st.button('Predict'):
