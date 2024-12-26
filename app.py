@@ -1,23 +1,26 @@
-import streamlit as st 
+import streamlit as st
 import numpy as np
 import tensorflow as tf
 from sklearn.preprocessing import StandardScaler, OneHotEncoder, LabelEncoder
 import pandas as pd
-import pickle
+import joblib
 
-#Load the trained model without compiling
-model = tf.keras.models.load_model('Artifacts/customer_churn_model.h5', compile=False)
-
-# Compile the model
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+# Load the trained model without compiling
+try:
+    model = tf.keras.models.load_model('Artifacts/customer_churn_model.h5', compile=False)
+    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+except Exception as e:
+    st.error(f"Error loading model: {e}")
+    st.stop()
 
 # Load the encoders and scalers
-with open('Artifacts/scaler.pkl', 'rb') as f:
-    scaler = pickle.load(f)
-with open('Artifacts/label_encoder.pkl', 'rb') as f:
-    label_encoder = pickle.load(f)
-with open('Artifacts/one_hot_encoder.pkl', 'rb') as f:
-    one_hot_encoder = pickle.load(f)
+try:
+    scaler = joblib.load('Artifacts/scaler.pkl')
+    label_encoder = joblib.load('Artifacts/label_encoder.pkl')
+    one_hot_encoder = joblib.load('Artifacts/one_hot_encoder.pkl')
+except Exception as e:
+    st.error(f"Error loading encoders or scalers: {e}")
+    st.stop()
 
 # Title
 st.title('Customer Churn Prediction')
@@ -35,6 +38,7 @@ with col3:
     age = st.number_input('Age', min_value=18, max_value=100)
 with col4:
     tenure = st.slider('Tenure', 0, 10)
+
 # Row 2
 with col1:
     balance = st.number_input('Balance', min_value=0.0)
@@ -92,3 +96,4 @@ def preprocess_and_predict():
 # Button to perform prediction
 if st.button('Predict'):
     preprocess_and_predict()
+
